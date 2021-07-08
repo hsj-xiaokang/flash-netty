@@ -9,7 +9,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
-
+/**
+ * 
+ * @Description: 
+ * handler在初始化时就会执行，而childHandler会在客户端成功connect后才执行，这是两者的区别。
+ * 通过handler添加的handlers是对bossGroup线程组起作用；
+ * 通过childHandler添加的handlers是对workerGroup线程组起作用；
+ * @author: 何胜金 --qq:2356899074
+ * @date: 2021年7月8日 下午11:35:27
+ */
 public class NettyServer {
 
     private static final int BEGIN_PORT = 8000;
@@ -19,17 +27,20 @@ public class NettyServer {
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
 
         final ServerBootstrap serverBootstrap = new ServerBootstrap();
+        final AttributeKey<Object> serverKey = AttributeKey.newInstance("serverName");
         final AttributeKey<Object> clientKey = AttributeKey.newInstance("clientKey");
         serverBootstrap
                 .group(boosGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .handler(new ChannelInboundHandlerAdapter() {
-                    @Override
+                    @SuppressWarnings("deprecation")
+					@Override
                     public void channelActive(ChannelHandlerContext ctx) throws Exception {
                         super.channelActive(ctx);
+                        System.out.println(ctx.attr(serverKey).get());
                     }
                 })
-                .attr(AttributeKey.newInstance("serverName"), "nettyServer")
+                .attr(serverKey, "nettyServer")
                 .childAttr(clientKey, "clientValue")
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
