@@ -2,9 +2,15 @@ package the.flash.bytebuf;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.util.internal.PlatformDependent;
+import io.netty.util.internal.SystemPropertyUtil;
 
 public class ByteBufTest {
     public static void main(String[] args) {
+    	//pooled池化-netty4.1.6
+    	System.out.println(SystemPropertyUtil.get(
+                "io.netty.allocator.type", PlatformDependent.isAndroid() ? "unpooled" : "pooled"));
+    	
         ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer(9, 100);
 
         print("allocate ByteBuf(9, 100)", buffer);
