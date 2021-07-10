@@ -9,6 +9,7 @@ import the.flash.protocol.request.LoginRequestPacket;
 import the.flash.protocol.request.MessageRequestPacket;
 import the.flash.protocol.response.LoginResponsePacket;
 import the.flash.protocol.response.MessageResponsePacket;
+import the.flash.util.LoginUtil;
 
 import java.util.Date;
 
@@ -21,6 +22,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    	System.out.println("//////////服务器目前login:" + LoginUtil.hasLoginServe(ctx.channel())+"//////////");
+    	 
         ByteBuf requestByteBuf = (ByteBuf) msg;
 
         Packet packet = PacketCodeC.INSTANCE.decode(requestByteBuf);
@@ -35,6 +38,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             if (valid(loginRequestPacket)) {
                 loginResponsePacket.setSuccess(true);
                 System.out.println(new Date() + ": 登录成功!");
+                LoginUtil.markAsLoginServe(ctx.channel());
             } else {
                 loginResponsePacket.setReason("账号密码校验失败");
                 loginResponsePacket.setSuccess(false);
@@ -47,7 +51,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             // 客户端发来消息
             MessageRequestPacket messageRequestPacket = ((MessageRequestPacket) packet);
 
-            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();           
             System.out.println(new Date() + ": 收到客户端消息: " + messageRequestPacket.getMessage());
             messageResponsePacket.setMessage("服务端回复【" + messageRequestPacket.getMessage() + "】");
             ByteBuf responseByteBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), messageResponsePacket);

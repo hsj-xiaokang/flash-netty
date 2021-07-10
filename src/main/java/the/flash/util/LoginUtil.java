@@ -14,4 +14,14 @@ public class LoginUtil {
 
         return loginAttr.get() != null;
     }
+    
+    public static void markAsLoginServe(Channel channel) {
+        channel.attr(Attributes.LOGIN_SERVE).set(true);
+    }
+
+    public static boolean hasLoginServe(Channel channel) {
+        Attribute<Boolean> loginAttr = channel.attr(Attributes.LOGIN_SERVE);
+
+        return loginAttr.get() != null;
+    }
 }
