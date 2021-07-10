@@ -18,7 +18,7 @@ public class PacketCodeC {
 
     static {
         packetTypeMap = new HashMap<>();
-        packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
