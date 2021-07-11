@@ -2,7 +2,13 @@ package the.flash.server.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-
+/**
+ * 
+channelRead()和channelReadComplete()不总是成对出现，可能好几个channelReade()才会有一个channelReadComplete()出现。
+比如某次连续10个分包读取，每读取一个分包就会channelRead()，但读取完全部10个分包才会一次channelReadComplete()。
+ * @author: 何胜金 --qq:2356899074
+ * @date: 2021年7月11日 上午11:52:50
+ */
 public class LifeCyCleTestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {

@@ -81,7 +81,11 @@ public class NettyClient {
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
 
-                    channel.writeAndFlush(new MessageRequestPacket(line));
+                    for(int i = 0,ilen = 50; i < ilen; i++) {
+//                    	channelRead()和channelReadComplete()不总是成对出现，可能好几个channelReade()才会有一个channelReadComplete()出现。
+//                    	比如某次连续10个分包读取，每读取一个分包就会channelRead()，但读取完全部10个分包才会一次channelReadComplete()。
+                      channel.writeAndFlush(new MessageRequestPacket(line));
+                    }
                 }
             }
         }).start();
