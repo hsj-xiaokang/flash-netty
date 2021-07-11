@@ -15,10 +15,12 @@ public class Spliter extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        if (in.getInt(in.readerIndex()) != PacketCodeC.MAGIC_NUMBER) {
-            ctx.channel().close();
-            return null;
-        }
+//    	判断协议开头（四个字节）需要在业务解码步骤进行，而不应该放在业务拆包之前。
+//    	高频繁的收发数据才能复现~
+//        if (in.getInt(in.readerIndex()) != PacketCodeC.MAGIC_NUMBER) {
+//            ctx.channel().close();
+//            return null;
+//        }
 
         return super.decode(ctx, in);
     }
